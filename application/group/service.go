@@ -1,7 +1,7 @@
 package group
 
 import (
-	"example.com/demo/repository"
+	"github.com/tttinh/go-rest-api-with-gin/repository"
 )
 
 type Service interface {

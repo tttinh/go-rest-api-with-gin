@@ -1,10 +1,10 @@
 package main
 
 import (
-	"example.com/demo/application/group"
-	"example.com/demo/repository"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/tttinh/go-rest-api-with-gin/application/group"
+	"github.com/tttinh/go-rest-api-with-gin/repository"
 	"log"
 	"net/http"
 	"os"
