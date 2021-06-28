@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/tttinh/go-rest-api-with-gin/application/group"
+	"github.com/tttinh/go-rest-api-with-gin/pkg/setting"
 	"github.com/tttinh/go-rest-api-with-gin/repository"
 	"log"
 	"net/http"
@@ -14,13 +15,12 @@ import (
 
 func main() {
 
-	r := gin.Default()
+	setting.Setup()
+	repositories := repository.New()
+	groupService := group.NewService(repositories.Group)
 
-	groupRepository := repository.NewGroupRepository(nil)
-	groupService := group.NewService(groupRepository)
-	groupEndpoints := group.NewEndpoints(groupService)
-	groupRouters := r.Group("/api/v1/group")
-	group.SetupHandler(groupRouters, groupEndpoints)
+	r := gin.Default()
+	group.MakeHandler(r.Group("/api/v1/group"), groupService)
 
 	maxHeaderBytes := 1 << 20
 	server := &http.Server{

@@ -1,31 +1,29 @@
 package repository
 
 import (
-	"context"
-	"database/sql"
-	"errors"
+	"github.com/jinzhu/gorm"
 )
 
 type GroupRepository interface {
-	GetGroup(ctx context.Context, id string) (string, error)
+	GetGroup(id string) (string, error)
 }
 
-var RepoErr = errors.New("unable to handle repository request")
+//var RepoErr = errors.New("unable to handle repository request")
 
-type groupRepository struct {
-	db *sql.DB
+type groupRepositoryImpl struct {
+	db *gorm.DB
 }
 
-func NewGroupRepository(db *sql.DB) *groupRepository {
-	return &groupRepository{db: db}
+func makeGroupRepository(db *gorm.DB) *groupRepositoryImpl {
+	return &groupRepositoryImpl{db: db}
 }
 
-func (r *groupRepository) GetGroup(ctx context.Context, id string) (string, error) {
+func (r *groupRepositoryImpl) GetGroup(id string) (string, error) {
 	var description string
-	err := r.db.QueryRow("SELECT description FROM 'group' WHERE id=$1", id).Scan(&description)
-	if err != nil {
-		return "", RepoErr
-	}
+	//err := r.db.QueryRow("SELECT description FROM 'group' WHERE id=$1", id).Scan(&description)
+	//if err != nil {
+	//	return "", RepoErr
+	//}
 
 	return description, nil
 }
