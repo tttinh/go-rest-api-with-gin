@@ -2,7 +2,7 @@ package repository
 
 import (
 	"fmt"
-	config2 "github.com/tttinh/go-rest-api-with-gin/config"
+	config2 "github.com/tttinh/go-rest-api-with-gin/setting"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"

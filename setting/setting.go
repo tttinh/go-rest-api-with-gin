@@ -1,4 +1,4 @@
-package config
+package setting
 
 import (
 	"github.com/spf13/viper"
@@ -20,14 +20,14 @@ type DatabaseConfig struct {
 	Name     string
 }
 
-type Config struct {
+type Setting struct {
 	Server   *ServerConfig
 	Database *DatabaseConfig
 }
 
 // Load is an exported method that takes the environment starts the viper
 // (external lib) and returns the configuration struct.
-func Load(env string) Config {
+func Load(env string) Setting {
 	var err error
 	v := viper.New()
 	v.SetConfigType("yaml")
@@ -38,11 +38,11 @@ func Load(env string) Config {
 		log.Fatal("error on loading configuration file")
 	}
 
-	var config Config
-	err = v.Unmarshal(&config)
+	var setting Setting
+	err = v.Unmarshal(&setting)
 	if err != nil {
 		log.Fatal("error on unmarshalling configuration file")
 	}
 
-	return config
+	return setting
 }
