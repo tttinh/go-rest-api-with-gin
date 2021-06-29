@@ -1,29 +1,30 @@
 package repository
 
 import (
-	"github.com/jinzhu/gorm"
+	"github.com/tttinh/go-rest-api-with-gin/domain"
+	"gorm.io/gorm"
 )
 
 type GroupRepository interface {
-	GetGroup(id string) (string, error)
+	GetGroup(id string) (*domain.Group, error)
 }
 
 //var RepoErr = errors.New("unable to handle repository request")
 
 type groupRepositoryImpl struct {
-	db *gorm.DB
 }
 
-func makeGroupRepository(db *gorm.DB) *groupRepositoryImpl {
-	return &groupRepositoryImpl{db: db}
+func makeGroupRepository() *groupRepositoryImpl {
+	return &groupRepositoryImpl{}
 }
 
-func (r *groupRepositoryImpl) GetGroup(id string) (string, error) {
-	var description string
-	//err := r.db.QueryRow("SELECT description FROM 'group' WHERE id=$1", id).Scan(&description)
-	//if err != nil {
-	//	return "", RepoErr
-	//}
+// GetGroup Get a single group based on id
+func (r *groupRepositoryImpl) GetGroup(id string) (*domain.Group, error) {
+	var group domain.Group
+	err := db.Where("id = ? AND deleted = 0", id).First(&group).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
 
-	return description, nil
+	return &group, nil
 }

@@ -1,0 +1,13 @@
+database:
+  type: mysql
+  host: 127.0.0.1:3306
+  name: communitydb
+  username: root
+  password: Tokoin@123
+
+server:
+  # debug or release
+  mode: debug
+  port: :8080
+  read-timeout: 60
+  write-timeout: 60
