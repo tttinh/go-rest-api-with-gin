@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tttinh/go-rest-api-with-gin/pkg/errcode"
 	"github.com/tttinh/go-rest-api-with-gin/pkg/httptransport"
-	"net/http"
 )
 
 type Controller interface {
@@ -34,8 +33,8 @@ func (ctrl *controllerImpl) GetGroup(c *gin.Context) {
 	res, err := ctrl.service.GetGroup(req)
 
 	if err != nil {
-		httptransport.Response400(c, errcode.ErrInvalidInput, nil)
+		httptransport.Response400(c, errcode.InvalidInput, nil)
 	} else {
-		c.JSON(http.StatusOK, res)
+		httptransport.Response200(c, res)
 	}
 }

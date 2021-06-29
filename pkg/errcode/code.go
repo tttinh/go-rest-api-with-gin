@@ -3,5 +3,6 @@ package errcode
 type Code string
 
 const (
-	ErrInvalidInput Code = "INVALID_INPUT"
+	OK           Code = "OK"
+	InvalidInput Code = "INVALID_INPUT"
 )

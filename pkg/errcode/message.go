@@ -1,7 +1,8 @@
 package errcode
 
 var errorMessages = map[Code]string{
-	ErrInvalidInput: "Your input data is not valid!",
+	OK:           "The request has been processed successfully.",
+	InvalidInput: "Your input data is not valid!",
 }
 
 // GetMessage get error information based on Code
