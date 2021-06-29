@@ -2,7 +2,8 @@ package group
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tttinh/go-rest-api-with-gin/pkg/httperror"
+	"github.com/tttinh/go-rest-api-with-gin/pkg/errcode"
+	"github.com/tttinh/go-rest-api-with-gin/pkg/httptransport"
 	"net/http"
 )
 
@@ -33,7 +34,7 @@ func (ctrl *controllerImpl) GetGroup(c *gin.Context) {
 	res, err := ctrl.service.GetGroup(req)
 
 	if err != nil {
-		httperror.Response400(c, httperror.ErrInvalidInput, nil)
+		httptransport.Response400(c, errcode.ErrInvalidInput, nil)
 	} else {
 		c.JSON(http.StatusOK, res)
 	}

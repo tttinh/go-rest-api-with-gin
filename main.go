@@ -42,7 +42,7 @@ func run(appConfig config.Config, r *gin.Engine) {
 
 	errs := make(chan error, 2)
 	go func() {
-		log.Printf("[info] start httperror server listening 8080")
+		log.Printf("[info] start server on port %s", appConfig.Server.Port)
 		errs <- server.ListenAndServe()
 	}()
 	go func() {

@@ -1,4 +1,4 @@
-package httperror
+package errcode
 
 type Code string
 
