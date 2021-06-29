@@ -1,7 +1,6 @@
 package setting
 
 import (
-	"encoding/json"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -46,9 +45,6 @@ func Load() Setting {
 	if err != nil {
 		log.Fatal("error on unmarshalling configuration file")
 	}
-
-	settingJson, _ := json.Marshal(setting)
-	log.Printf("running app with setting: %s\n", settingJson)
 
 	return setting
 }
