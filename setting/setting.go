@@ -1,6 +1,7 @@
 package setting
 
 import (
+	"encoding/json"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -13,7 +14,6 @@ type ServerConfig struct {
 }
 
 type DatabaseConfig struct {
-	Type     string
 	Username string
 	Password string
 	Host     string
@@ -27,12 +27,15 @@ type Setting struct {
 
 // Load is an exported method that takes the environment starts the viper
 // (external lib) and returns the configuration struct.
-func Load(env string) Setting {
+func Load() Setting {
 	var err error
 	v := viper.New()
 	v.SetConfigType("yaml")
-	v.SetConfigName(env)
+	v.SetConfigName("application")
 	v.AddConfigPath(".")
+
+	bindEnv(v)
+
 	err = v.ReadInConfig()
 	if err != nil {
 		log.Fatal("error on loading configuration file")
@@ -44,5 +47,19 @@ func Load(env string) Setting {
 		log.Fatal("error on unmarshalling configuration file")
 	}
 
+	settingJson, _ := json.Marshal(setting)
+	log.Printf("running app with setting: %s\n", settingJson)
+
 	return setting
+}
+
+func bindEnv(v *viper.Viper) {
+	v.BindEnv("database.host", "DBHOST")
+	v.BindEnv("database.username", "DBUSERNAME")
+	v.BindEnv("database.password", "DBPASSWORD")
+
+	v.BindEnv("server.mode", "SERVER_MODE")
+	v.BindEnv("server.port", "SERVER_PORT")
+	v.BindEnv("server.read-timeout", "SERVER_READTIMEOUT")
+	v.BindEnv("server.write-timeout", "SERVER_WRITETIMEOUT")
 }

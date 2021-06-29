@@ -1,0 +1,12 @@
+database:
+  host: 127.0.0.1:3306 #DBHOST
+  name: communitydb
+  username: root #DBUSERNAME
+  password: Tokoin@123 #DBPASSWORD
+
+server:
+  # debug or release
+  mode: debug #SERVER_MODE
+  port: :8080 #SERVER_PORT
+  read-timeout: 60 #SERVER_READTIMEOUT
+  write-timeout: 60 #SERVER_WRITETIMEOUT

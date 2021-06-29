@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	appSetting := setting.Load("development")
+	appSetting := setting.Load()
 	repositories := repository.New(appSetting.Database)
 	groupService := group.NewService(repositories.Group)
 	groupController := group.NewController(groupService)
