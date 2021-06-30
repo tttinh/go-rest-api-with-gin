@@ -5,8 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tttinh/go-rest-api-with-gin/app/group"
 	"github.com/tttinh/go-rest-api-with-gin/infra/config"
-	"github.com/tttinh/go-rest-api-with-gin/infra/logger"
+	"github.com/tttinh/go-rest-api-with-gin/infra/log"
 	"github.com/tttinh/go-rest-api-with-gin/infra/persistence"
+	httptransport "github.com/tttinh/go-rest-api-with-gin/infra/transport/http"
 	"github.com/tttinh/go-rest-api-with-gin/repository"
 	"net/http"
 	"os"
@@ -19,15 +20,19 @@ func main() {
 	// Loading configuration.
 	cfg := config.NewConfig()
 
-	// Init logger
-	logger.Initialize(cfg.Server.Mode)
+	// Init log
+	logger := log.NewLogger(cfg.Server.Mode)
 
 	// Connecting DB.
 	db := persistence.NewDB(cfg)
 
 	// Setup Gin.
 	gin.SetMode(cfg.Server.Mode)
-	r := gin.Default()
+	//r := gin.Default()
+	r := gin.New()
+	httpLogger := logger.With("component", "http")
+	r.Use(httptransport.Logger(httpLogger))
+	r.Use(httptransport.Recovery(httpLogger, false))
 
 	// Create application logic services.
 	groupRepository := repository.NewGroupRepository(db)
@@ -36,10 +41,10 @@ func main() {
 	group.SetRoutes(r, groupController)
 
 	// Start server.
-	run(cfg, r)
+	run(logger, cfg, r)
 }
 
-func run(cfg config.Config, r *gin.Engine) {
+func run(logger log.Logger, cfg config.Config, r *gin.Engine) {
 	readTimeout := time.Duration(cfg.Server.ReadTimeout) * time.Second
 	writeTimeout := time.Duration(cfg.Server.WriteTimeout) * time.Second
 	maxHeaderBytes := 1 << 20
