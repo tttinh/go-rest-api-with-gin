@@ -32,7 +32,7 @@ func main() {
 	r := gin.New()
 	httpLogger := logger.With("component", "http")
 	r.Use(httptransport.Logger(httpLogger))
-	r.Use(httptransport.Recovery(httpLogger, false))
+	r.Use(httptransport.Recovery(httpLogger))
 
 	// Create application logic services.
 	groupRepository := repository.NewGroupRepository(db)

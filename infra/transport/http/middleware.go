@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"os"
-	"runtime/debug"
 	"strings"
 	"time"
 )
@@ -49,7 +48,7 @@ func Logger(logger log.Logger) gin.HandlerFunc {
 }
 
 // Recovery returns a gin.HandlerFunc (middleware) that recoveries from errors.
-func Recovery(logger log.Logger, stack bool) gin.HandlerFunc {
+func Recovery(logger log.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
@@ -76,18 +75,10 @@ func Recovery(logger log.Logger, stack bool) gin.HandlerFunc {
 					return
 				}
 
-				if stack {
-					logger.Error("Recovery from panic",
-						"error", err,
-						"request", string(httpRequest),
-						"stack", string(debug.Stack()),
-					)
-				} else {
-					logger.Error("Recovery from panic",
-						"error", err,
-						"request", string(httpRequest),
-					)
-				}
+				logger.Error("Recovery from panic",
+					"error", err,
+					"request", string(httpRequest),
+				)
 				c.AbortWithStatus(http.StatusInternalServerError)
 			}
 		}()
