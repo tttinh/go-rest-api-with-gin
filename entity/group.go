@@ -1,7 +1,7 @@
-package domain
+package entity
 
 import (
-	"github.com/tttinh/go-rest-api-with-gin/pkg/common"
+	"github.com/tttinh/go-rest-api-with-gin/infra/common"
 	"time"
 )
 

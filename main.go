@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/tttinh/go-rest-api-with-gin/application/group"
+	"github.com/tttinh/go-rest-api-with-gin/app/group"
+	"github.com/tttinh/go-rest-api-with-gin/infra/config"
+	"github.com/tttinh/go-rest-api-with-gin/infra/persistence"
 	"github.com/tttinh/go-rest-api-with-gin/repository"
-	"github.com/tttinh/go-rest-api-with-gin/setting"
 	"log"
 	"net/http"
 	"os"
@@ -15,25 +16,32 @@ import (
 )
 
 func main() {
-	appSetting := setting.Load()
-	repositories := repository.New(appSetting.Database)
-	groupService := group.NewService(repositories.Group)
-	groupController := group.NewController(groupService)
+	// Loading configuration.
+	cfg := config.NewConfig()
 
-	gin.SetMode(appSetting.Server.Mode)
+	// Connecting DB.
+	db := persistence.NewDB(cfg)
+
+	// Setup Gin.
+	gin.SetMode(cfg.Server.Mode)
 	r := gin.Default()
 
-	groupController.SetRoutes(r.Group("/api/v1/group"))
+	// Create application logic services.
+	groupRepository := repository.NewGroupRepository(db)
+	groupService := group.NewService(groupRepository)
+	groupController := group.NewController(groupService)
+	group.SetRoutes(r, groupController)
 
-	run(appSetting, r)
+	// Start server.
+	run(cfg, r)
 }
 
-func run(appConfig setting.Setting, r *gin.Engine) {
-	readTimeout := time.Duration(appConfig.Server.ReadTimeout) * time.Second
-	writeTimeout := time.Duration(appConfig.Server.WriteTimeout) * time.Second
+func run(cfg config.Config, r *gin.Engine) {
+	readTimeout := time.Duration(cfg.Server.ReadTimeout) * time.Second
+	writeTimeout := time.Duration(cfg.Server.WriteTimeout) * time.Second
 	maxHeaderBytes := 1 << 20
 	server := &http.Server{
-		Addr:           appConfig.Server.Port,
+		Addr:           cfg.Server.Port,
 		Handler:        r,
 		ReadTimeout:    readTimeout,
 		WriteTimeout:   writeTimeout,
@@ -42,7 +50,7 @@ func run(appConfig setting.Setting, r *gin.Engine) {
 
 	errs := make(chan error, 2)
 	go func() {
-		log.Printf("[info] start server on port %s", appConfig.Server.Port)
+		log.Printf("[info] start server on port %s", cfg.Server.Port)
 		errs <- server.ListenAndServe()
 	}()
 	go func() {

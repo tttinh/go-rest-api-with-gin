@@ -1,8 +1,8 @@
-package httptransport
+package http
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tttinh/go-rest-api-with-gin/pkg/errcode"
+	"github.com/tttinh/go-rest-api-with-gin/infra/errcode"
 	"net/http"
 )
 
