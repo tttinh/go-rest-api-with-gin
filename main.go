@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tttinh/go-rest-api-with-gin/app/group"
 	"github.com/tttinh/go-rest-api-with-gin/infra/config"
+	"github.com/tttinh/go-rest-api-with-gin/infra/logger"
 	"github.com/tttinh/go-rest-api-with-gin/infra/persistence"
 	"github.com/tttinh/go-rest-api-with-gin/repository"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -18,6 +18,9 @@ import (
 func main() {
 	// Loading configuration.
 	cfg := config.NewConfig()
+
+	// Init logger
+	logger.Initialize(cfg.Server.Mode)
 
 	// Connecting DB.
 	db := persistence.NewDB(cfg)
@@ -50,7 +53,7 @@ func run(cfg config.Config, r *gin.Engine) {
 
 	errs := make(chan error, 2)
 	go func() {
-		log.Printf("[info] start server on port %s", cfg.Server.Port)
+		logger.Info("starting server on port ", cfg.Server.Port)
 		errs <- server.ListenAndServe()
 	}()
 	go func() {
@@ -59,5 +62,5 @@ func run(cfg config.Config, r *gin.Engine) {
 		errs <- fmt.Errorf("%s", <-c)
 	}()
 
-	log.Printf("terminated %v", <-errs)
+	logger.Info("server stopped: ", <-errs)
 }
