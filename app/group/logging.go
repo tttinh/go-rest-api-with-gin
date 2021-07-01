@@ -12,7 +12,7 @@ type loggingService struct {
 
 func (s *loggingService) GetGroup(req GetGroupRequest) (res *GetGroupResponse, err error) {
 	defer func(begin time.Time) {
-		s.logger.Infow("GetGroup",
+		s.logger.Infow("get_group",
 			"req", req,
 			"took", time.Since(begin),
 			"err", err,
@@ -23,7 +23,7 @@ func (s *loggingService) GetGroup(req GetGroupRequest) (res *GetGroupResponse, e
 
 func (s *loggingService) CreateGroup(req CreateGroupRequest) (err error) {
 	defer func(begin time.Time) {
-		s.logger.Infow("CreateGroup",
+		s.logger.Infow("create_group",
 			"req", req,
 			"took", time.Since(begin),
 			"err", err,

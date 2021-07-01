@@ -19,6 +19,7 @@ func NewLogger(environment string) Logger {
 		conf = newDevelopmentConfig()
 	}
 
+	conf.DisableCaller = true
 	conf.DisableStacktrace = true
 	log, err := conf.Build()
 	if err != nil {
