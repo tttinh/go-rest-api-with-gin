@@ -5,6 +5,7 @@ import (
 	"github.com/tttinh/go-rest-api-with-gin/infra/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"log"
 )
 
@@ -19,7 +20,13 @@ func NewDB(appSetting config.Config) *gorm.DB {
 		dbConfig.Name,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	gormCfg := &gorm.Config{}
+	if appSetting.Server.Mode == "release" {
+		gormCfg.Logger = logger.Default.LogMode(logger.Silent)
+	}
+
+	db, err := gorm.Open(mysql.Open(dsn), gormCfg)
+
 	if err != nil {
 		log.Fatalf("Failed to init database, err: %v", err)
 	}

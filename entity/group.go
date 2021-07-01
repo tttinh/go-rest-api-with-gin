@@ -23,7 +23,7 @@ type Group struct {
 	UpdatedAt     time.Time
 }
 
-// TableName overrides the table name used by User to `profiles`
+// TableName sets the table name for the entity.
 func (Group) TableName() string {
 	return "group"
 }

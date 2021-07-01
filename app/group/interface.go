@@ -7,13 +7,17 @@ import (
 )
 
 type Service interface {
-	GetGroup(req GetGroupRequest) (*GetGroupResponse, error)
-	CreateGroup(req CreateGroupRequest) error
+	GetGroup(requesterID string, groupID string) (*GetGroupResponse, error)
+	CreateGroup(requesterID string, req CreateGroupRequest) error
+	UpdateGroup(requesterID string, groupID string, req UpdateGroupRequest) error
+	DeleteGroup(requesterID string, groupID string) error
 }
 
 type Controller interface {
 	GetGroup(c *gin.Context)
 	CreateGroup(c *gin.Context)
+	UpdateGroup(c *gin.Context)
+	DeleteGroup(c *gin.Context)
 }
 
 func NewService(repo repository.GroupRepository) Service {
