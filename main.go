@@ -36,9 +36,10 @@ func main() {
 
 	// Create application logic services.
 	groupRepository := repository.NewGroupRepository(db)
-	groupService := group.NewService(groupRepository)
-	groupController := group.NewController(groupService)
-	group.SetRoutes(r, groupController)
+	var groupService group.Service
+	groupService = group.NewService(groupRepository)
+	groupService = group.NewLoggingService(logger.With("component", "group"), groupService)
+	group.SetRoutes(r, groupService)
 
 	// Start server.
 	run(logger, cfg, r)

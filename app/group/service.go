@@ -4,17 +4,11 @@ import (
 	"github.com/tttinh/go-rest-api-with-gin/repository"
 )
 
-type Service struct {
+type serviceImpl struct {
 	groupRepository repository.GroupRepository
 }
 
-func NewService(groupRepository repository.GroupRepository) *Service {
-	return &Service{
-		groupRepository: groupRepository,
-	}
-}
-
-func (s *Service) GetGroup(req GetGroupRequest) (*GetGroupResponse, error) {
+func (s *serviceImpl) GetGroup(req GetGroupRequest) (*GetGroupResponse, error) {
 	group, _ := s.groupRepository.GetGroup(req.ID)
 
 	res := &GetGroupResponse{
@@ -36,4 +30,8 @@ func (s *Service) GetGroup(req GetGroupRequest) (*GetGroupResponse, error) {
 	}
 
 	return res, nil
+}
+
+func (s *serviceImpl) CreateGroup(req CreateGroupRequest) error {
+	return nil
 }

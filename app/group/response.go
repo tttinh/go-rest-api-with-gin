@@ -1,9 +1,5 @@
 package group
 
-type GetGroupRequest struct {
-	ID string
-}
-
 type GetGroupResponse struct {
 	ID            string `json:"id"`
 	Privacy       string `json:"privacy"`
